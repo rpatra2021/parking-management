@@ -14,7 +14,6 @@ const getEthereumContract = () => {
 
 export const ParkingProvider = ({children}) => {
     const [currentAccount, setCurrentAccount] = useState("");
-    // const [accountBalance, setAccountBalance] = useState("");
     const [allParkingList, setAllParkingList] = useState([]);
     const [formData, setFormData] = useState({ 
         parkingName: "", parkingAddress: "", parkingCity: "", parkingState: "", parkingCountry: "", parkingZipCode: "",
