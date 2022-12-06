@@ -17,7 +17,7 @@ export const ParkingProvider = ({children}) => {
     // const [accountBalance, setAccountBalance] = useState("");
     const [allParkingList, setAllParkingList] = useState([]);
     const [formData, setFormData] = useState({ 
-        parkingName: "", parkingAddress: "", parkingCity: "", parkingState: "", parkingCountry: "",
+        parkingName: "", parkingAddress: "", parkingCity: "", parkingState: "", parkingCountry: "", parkingZipCode: "",
         parkingCapacity: 0,  parkingAmount: 0, amountUnit: "", parkingDetails: "", vehicleType: [],
         isError: false,
     });
@@ -81,7 +81,7 @@ export const ParkingProvider = ({children}) => {
             if(!currentAccount) connectWallet();
             setIsLoading(true);
             const { 
-                parkingName, parkingAddress, parkingCity, parkingState, parkingCountry,
+                parkingName, parkingAddress, parkingCity, parkingState, parkingCountry, parkingZipCode,
                 parkingCapacity,  parkingAmount, amountUnit, parkingDetails, vehicleType 
             } = formData;
             console.log("createNewParking", vehicleType);
@@ -90,7 +90,7 @@ export const ParkingProvider = ({children}) => {
             const parkingContract = getEthereumContract();
 
             const pangHashData = await parkingContract.addParkingToBlockchain(
-                parkingName, parkingAddress, parkingCity, parkingState, parkingCountry, parkingCapacity, parkingAmount, amountUnit,
+                parkingName, parkingAddress, parkingCity, parkingState, parkingCountry, parkingZipCode, parkingCapacity, parkingAmount, amountUnit,
                 parkingDetails, vehicleTypeStr
             );
             await pangHashData.wait();

@@ -32,7 +32,7 @@ const parkingListData = (allParkingLists) => {
                         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                             <LocalParkingIcon />
                         </Avatar>
-                        <Typography component="h1" variant="h5">
+                        <Typography component="h1" variant="h5" style={{color: "#1976d2"}}>
                             { dataObj.parkingName }
                         </Typography>
                     </Box>
@@ -40,10 +40,10 @@ const parkingListData = (allParkingLists) => {
                         { hexToDecimal(dataObj.parkingAmount._hex) } { dataObj.amountUnit } / hour
                     </div>
                     <div>
-                        { dataObj.parkingAddress }, { dataObj.parkingCity }, { dataObj.parkingState }, { dataObj.parkingCountry }
+                        <b>{ dataObj.parkingAddress }, { dataObj.parkingCity }, { dataObj.parkingState }, { dataObj.parkingCountry }, PinCode: { dataObj.parkingZipCode }</b>
                     </div>
                     <div>
-                        Available Space for booking: { hexToDecimal(dataObj.parkingCapacity._hex) }
+                        Parking Capacity: { hexToDecimal(dataObj.parkingCapacity._hex) }
                     </div>
                     <div>
                         We accept: { dataObj.vehicleType }

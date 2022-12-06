@@ -8,12 +8,11 @@ contract Parking {
 
     struct ParkingStruct {
         address owner; uint256 parkingId; 
-        string parkingName; string parkingAddress; string parkingCity; string parkingState; string parkingCountry;
+        string parkingName; string parkingAddress; string parkingCity; string parkingState; string parkingCountry; string parkingZipCode;
         uint256 parkingCapacity; uint256 parkingAmount; string amountUnit;
         string parkingDetails; string vehicleType;
         uint256 timestamp;
     }
-    
     ParkingStruct[] parkingList;
 
     function addParkingToBlockchain(
@@ -22,6 +21,7 @@ contract Parking {
         string memory parkingCity, 
         string memory parkingState,
         string memory parkingCountry,
+        string memory parkingZipCode,
         uint256 parkingCapacity,
         uint256 parkingAmount,
         string memory amountUnit,
@@ -31,7 +31,7 @@ contract Parking {
         parkingId += 1;
         parkingList.push(ParkingStruct(
             msg.sender, parkingId, 
-            parkingName, parkingAddress, parkingCity, parkingState, parkingCountry,
+            parkingName, parkingAddress, parkingCity, parkingState, parkingCountry, parkingZipCode,
             parkingCapacity, parkingAmount, amountUnit, 
             parkingDetails, vehicleType,
             block.timestamp

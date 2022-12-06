@@ -85,17 +85,22 @@ const CreateParking = () => {
                             name="parkingAddress" autoFocus value={formData.parkingAddress} onChange={handleChange}
                         />
 
-                        <TextField sx={{ m: 1, width: '38ch' }}
+                        <TextField sx={{ m: 1, width: '58ch' }}
+                            margin="normal" required fullWidth id="parking-pincode" label="Parking Address PinCode"
+                            name="parkingZipCode" autoFocus value={formData.parkingZipCode} onChange={handleChange}
+                        />
+
+                        <TextField sx={{ m: 1, width: '58ch' }}
                             margin="normal" required fullWidth id="parking-capacity" label="Parking Capacity" type="number" InputProps={{ inputProps: { min: 0 } }}
                             name="parkingCapacity" autoFocus value={formData.parkingCapacity} onChange={handleChange}
                         />
 
-                        <TextField sx={{ m: 1, width: '38ch' }}
-                            margin="normal" required fullWidth id="parking-amount" label="Parking Amount" type="number" InputProps={{ inputProps: { min: 0 } }}
+                        <TextField sx={{ m: 1, width: '58ch' }}
+                            margin="normal" required fullWidth id="parking-amount" label="Parking Amount/hour" type="number" InputProps={{ inputProps: { min: 0 } }}
                             name="parkingAmount" autoFocus value={formData.parkingAmount} onChange={handleChange}
                         />
 
-                        <TextField sx={{ m: 1, width: '38ch' }}
+                        <TextField sx={{ m: 1, width: '58ch' }}
                             margin="normal" required fullWidth id="parking-amount-unit" select label="Parking Amount Unit"
                             name="amountUnit" autoFocus  onChange={handleCurrencyChange} value={currency} 
                         >
@@ -139,7 +144,6 @@ const CreateParking = () => {
                                 Saving ...
                             </Button>
                         )}
-                        
                     </div>
                 </Box>
 
