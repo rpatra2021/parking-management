@@ -7,7 +7,7 @@ const hexToDecimal = hex => parseInt(hex, 16);
 var moment = require('moment');
 
 function ParkingBookingList() {
-    const { allBookingList } = useContext(ParkingContext);
+    const { currentAccount,allBookingList } = useContext(ParkingContext);
     console.log(allBookingList);
     return (
         <AuthLayout>
@@ -18,14 +18,14 @@ function ParkingBookingList() {
                     </Typography>
                 </Box>
                 <Grid container spacing={2}>
-                    { bookingListData(allBookingList) }
+                    { bookingListData(currentAccount, allBookingList) }
                 </Grid>
             </Container>
         </AuthLayout>
     );
 }
 
-const bookingListData = (allBookingList) => {
+const bookingListData = (currentAccount, allBookingList) => {
     return (
         <table className="parking-booking-list" id="parking-bookings">
             <thead>
@@ -42,7 +42,7 @@ const bookingListData = (allBookingList) => {
                     <tr key={hexToDecimal(dataObj.timestamp._hex)}>
                         <td>
                             Booking By:  { dataObj.bookingBy }<br></br>
-                            { dataObj.idType }:  { dataObj.idCardNumber }
+                            { returnIfValidOwner(currentAccount, dataObj.bookingOwner, dataObj.parkingOwner, dataObj.idType + " : " + dataObj.idCardNumber) }
                         </td>
                         <td>
                             Parking Id: { hexToDecimal(dataObj.parkingsId._hex) }<br></br>
@@ -51,8 +51,7 @@ const bookingListData = (allBookingList) => {
                         </td>
                         <td>
                             Booking Id: { hexToDecimal(dataObj.bookingId._hex) } <br></br>
-                            Booking For: { dataObj.parkingFor }<br></br>
-                            Registration No: { dataObj.vehicleRegistrationNo }
+                            { returnIfValidOwner(currentAccount, dataObj.bookingOwner, dataObj.parkingOwner, dataObj.parkingFor +" Registration No : " + dataObj.vehicleRegistrationNo) } 
                         </td>
                         <td>{ moment.unix(hexToDecimal(dataObj.timestamp._hex)).format('ddd, MMM Do YYYY, hh:mm A') }</td>
                         <td>{ hexToDecimal(dataObj.bookingHour._hex) } {(hexToDecimal(dataObj.bookingHour._hex)>1)? "hours": "hour" }</td>
@@ -62,5 +61,14 @@ const bookingListData = (allBookingList) => {
         </table>
     )
 };
+
+const returnIfValidOwner = (currentAccount, bookingOwner, parkingOwner, data) =>{
+    console.log(currentAccount, bookingOwner, parkingOwner, data);
+    if(currentAccount.toUpperCase() == bookingOwner.toUpperCase() || currentAccount.toUpperCase() == parkingOwner.toUpperCase()){
+        return data;
+    } else {
+        return "";
+    }
+}
 
 export default ParkingBookingList;
