@@ -10,7 +10,9 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
-import ListIcon from '@mui/icons-material/List';
+import ViewListIcon from '@mui/icons-material/ViewList';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { 
     Box, Toolbar, IconButton, Typography, Divider, List, ListItemButton, ListItemIcon, ListItemText, ListSubheader
@@ -100,13 +102,18 @@ const Header = ({page, children}) => {
                     </ListItemButton>
                     
                     <ListItemButton onClick={() => navigate('/create-parking')}>
-                        <ListItemIcon> <LocalParkingIcon /> </ListItemIcon>
+                        <ListItemIcon> <AddCircleIcon /> </ListItemIcon>
                         <ListItemText primary="Create Parking" />
                     </ListItemButton>
 
                     <ListItemButton onClick={() => navigate('/parking-list')}>
-                        <ListItemIcon> <ListIcon /> </ListItemIcon>
+                        <ListItemIcon> <LocalParkingIcon /> </ListItemIcon>
                         <ListItemText primary="Parking List" />
+                    </ListItemButton>
+
+                    <ListItemButton onClick={() => navigate('/booking-list')}>
+                        <ListItemIcon> <DirectionsCarIcon /> </ListItemIcon>
+                        <ListItemText primary="Booking List" />
                     </ListItemButton>
                 </List>
             </Drawer>

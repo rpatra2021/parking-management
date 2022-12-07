@@ -84,8 +84,9 @@ export const ParkingProvider = ({children}) => {
             if (!ethereum) return alert("Please install metamask to your browser");
             const parkingContract = getEthereumContract();
             const parkingList = await parkingContract.getAllParkingList();
-            setAllParkingList(parkingList);
-            console.log("parkingList", parkingList);
+            const reversed = [...parkingList].reverse();
+            setAllParkingList(reversed);
+            console.log("parkingList", reversed);
         } catch (error) {
             console.log(error);
             throw new Error("No Ethereum object");
@@ -97,8 +98,9 @@ export const ParkingProvider = ({children}) => {
             if (!ethereum) return alert("Please install metamask to your browser");
             const parkingContract = getEthereumContract();
             const bookingList = await parkingContract.getAllBookingList();
-            setAllBookingList(bookingList);
-            console.log("bookingList", bookingList);
+            const reversed = [...bookingList].reverse();
+            setAllBookingList(reversed);
+            console.log("bookingList", reversed);
         } catch (error) {
             console.log(error);
             throw new Error("No Ethereum object");
