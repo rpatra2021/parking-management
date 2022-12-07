@@ -21,14 +21,26 @@ export const ParkingProvider = ({children}) => {
         isError: false,
     });
     const [isLoading, setIsLoading] = useState(false);
-
     const handleChange = (e, name) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
             isError: false
         });
-    }
+    };
+    const [formDataBooking, setFormDataBooking] = useState({
+        parkingId: "", parkingName: "", parkingAddress: "", bookingHour: 1, 
+        parkingCharge: 0, parkingChargeUnit: "", parkingFor: "",
+        isError: false,
+    });
+    const handleChangeBookParking = (e, name) => {
+        setFormDataBooking({
+            ...formDataBooking,
+            [e.target.name]: e.target.value,
+            isError: false
+        });
+    };
+    const [isBookingProcessing, setIsBookingProcessing] = useState(false);
 
     useEffect(() => {
         checkIfWalletIsConnected();
@@ -46,7 +58,7 @@ export const ParkingProvider = ({children}) => {
             console.log(error);
             throw new Error("No Ethereum object");
         }
-    }
+    };
     
     const connectWallet = async () => {
         try {
@@ -60,7 +72,7 @@ export const ParkingProvider = ({children}) => {
             console.log(error);
             throw new Error("No Ethereum object");
         }
-    }
+    };
 
     const getAllParkingListData = async () => {
         try {
@@ -103,8 +115,24 @@ export const ParkingProvider = ({children}) => {
         }
     };
 
+    const createNewBooking = async() =>{
+        try{
+            if(!currentAccount) connectWallet();
+            setIsBookingProcessing(true);
+            console.log(formDataBooking);
+
+            setIsBookingProcessing(false);
+        }  catch (error) {
+            console.log(error);
+            throw new Error("No Ethereum object");
+        }
+    }
+
     return(
-        <ParkingContext.Provider value={{ currentAccount, connectWallet, allParkingList, formData, setFormData, handleChange, createNewParking, isLoading }}>
+        <ParkingContext.Provider value={{ 
+            currentAccount, connectWallet, allParkingList, formData, setFormData, handleChange, createNewParking, isLoading,
+            formDataBooking, setFormDataBooking, handleChangeBookParking, createNewBooking, isBookingProcessing
+        }}>
             {children}
         </ParkingContext.Provider>
     );

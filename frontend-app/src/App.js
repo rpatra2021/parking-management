@@ -4,6 +4,7 @@ import AccountConnect from './components/connectAccount';
 import Dashboard from './components/dashboard';
 import CreateParking from './components/parking/createParking';
 import ParkingList from './components/parking/parkingList';
+import BookParking from './components/booking/bookParking';
 import CssBaseline from '@mui/material/CssBaseline';
 import Missing from './components/notFound';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -30,6 +31,9 @@ const App = () => {
                 )}
                 {currentAccount && (
                     <Route path="/create-parking" element={<CreateParking />} />
+                )}
+                {currentAccount && (
+                    <Route path="/book-parking" element={<BookParking />} />
                 )}
 
                 <Route path="*" element={<Missing />} />
