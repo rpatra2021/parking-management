@@ -11,37 +11,29 @@ import AuthLayout  from '../layouts/authLayout';
 
 
 const CreateParking = () => {
-    const {formData, handleChange, setFormData, createNewParking, isLoading} = useContext(ParkingContext);
+    const {formData, handleChange, setFormData, createNewParking, isLoading, vehicleTypeArrange, setVehicleTypeArrange} = useContext(ParkingContext);
     const [currency, setCurrency] = React.useState('');
     const handleCurrencyChange = (e, name) => {
         setCurrency(e.target.value);
         handleChange(e, name);
     };
-    const [acceptCarType, setAcceptCarType] = React.useState([]);
+
     const handleCheckboxChange = (e) => {
-        console.log("e.target", e.target.name, e.target.checked);
-        
+        let vehicleDataArrangeArray = vehicleTypeArrange.split(',');
+        const index = vehicleDataArrangeArray.indexOf('');
+        if (index > -1) { vehicleDataArrangeArray.splice(index, 1); }
         if(e.target.checked){
-            // setAcceptCarType(e.target.name);
-            setAcceptCarType(acceptCarType => [...acceptCarType, e.target.name]);
-            // acceptCarType.push(e.target.name);
+            vehicleDataArrangeArray.push(e.target.name);
         } else {
-            // const index = acceptCarType.indexOf(e.target.name);
-            // if (index > -1) {
-            //     acceptCarType.splice(index, 1);
-            // }
+            const index = vehicleDataArrangeArray.indexOf(e.target.name);
+            if (index > -1) {
+                vehicleDataArrangeArray.splice(index, 1);
+            }
         }
-        console.log(acceptCarType);
-        setFormData({
-            ...formData,
-            vehicleType: acceptCarType
-        });
+        setVehicleTypeArrange(vehicleDataArrangeArray.toString());
     };
     const submitLoginFormHandler = async (e) => {
         e.preventDefault();
-        
-        console.log("submitLoginFormHandler", formData);
-        // const { senderName, addressTo, receiverName, amount, message } = formData;
         createNewParking();
     }
 

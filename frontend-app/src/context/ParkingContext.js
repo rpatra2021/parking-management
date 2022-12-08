@@ -19,9 +19,11 @@ export const ParkingProvider = ({children}) => {
     const [allParkingList, setAllParkingList] = useState([]);
     const [formData, setFormData] = useState({ 
         parkingName: "", parkingAddress: "", parkingCity: "", parkingState: "", parkingCountry: "", parkingZipCode: "",
-        parkingCapacity: 0,  parkingAmount: 0, amountUnit: "", parkingDetails: "", vehicleType: [],
+        parkingCapacity: 0,  parkingAmount: 0, amountUnit: "", parkingDetails: "",
         isError: false,
     });
+    const [vehicleTypeArrange, setVehicleTypeArrange] = React.useState('');
+
     const [isLoading, setIsLoading] = useState(false);
     const handleChange = (e, name) => {
         setFormData({
@@ -121,9 +123,9 @@ export const ParkingProvider = ({children}) => {
             setIsLoading(true);
             const { 
                 parkingName, parkingAddress, parkingCity, parkingState, parkingCountry, parkingZipCode,
-                parkingCapacity,  parkingAmount, amountUnit, parkingDetails, vehicleType 
+                parkingCapacity,  parkingAmount, amountUnit, parkingDetails
             } = formData;
-            let vehicleTypeStr = vehicleType.toString();
+            let vehicleTypeStr = vehicleTypeArrange;
 
             const parkingContract = getEthereumContract();
             const pangHashData = await parkingContract.addParkingToBlockchain(
@@ -134,7 +136,7 @@ export const ParkingProvider = ({children}) => {
             setIsLoading(false);
             getAllParkingListData();
         }  catch (error) {
-            setIsLoading(true);
+            setIsLoading(false);
             console.log(error);
             throw new Error("No Ethereum object");
         }
@@ -184,7 +186,7 @@ export const ParkingProvider = ({children}) => {
 
     return(
         <ParkingContext.Provider value={{ 
-            currentAccount, connectWallet, allParkingList, formData, setFormData, handleChange, createNewParking, isLoading,
+            currentAccount, connectWallet, allParkingList, formData, setFormData, handleChange, createNewParking, isLoading, vehicleTypeArrange, setVehicleTypeArrange,
             formDataBooking, setFormDataBooking, handleChangeBookParking, createNewBooking, isBookingProcessing, allBookingList
         }}>
             {children}
