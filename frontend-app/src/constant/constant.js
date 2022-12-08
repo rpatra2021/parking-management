@@ -5,14 +5,14 @@ export const contractAbi = parkingJsn.abi;
 export const contractAddress = "0xa4D71e00aA801E18542Ad27eb330A0730D9185a8";
 
 export const currencies = [
-    // {
-    //     value: 'ETH',
-    //     label: 'Ξ(ETH)',
-    // },
     {
-        value: 'INR',
-        label: '₹(INR)',
+        value: 'ETH',
+        label: 'Ξ(ETH)',
     },
+    // {
+    //     value: 'INR',
+    //     label: '₹(INR)',
+    // },
     {
         value: 'USD',
         label: '$(USD)',

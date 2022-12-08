@@ -5,10 +5,10 @@ import AuthLayout  from '../layouts/authLayout';
 import {ParkingContext} from "../../context/ParkingContext";
 const hexToDecimal = hex => parseInt(hex, 16);
 var moment = require('moment');
+var Web3 = require('web3');
 
 function ParkingBookingList() {
     const { currentAccount,allBookingList } = useContext(ParkingContext);
-    console.log(allBookingList);
     return (
         <AuthLayout>
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -26,20 +26,26 @@ function ParkingBookingList() {
 }
 
 const bookingListData = (currentAccount, allBookingList) => {
+    console.log(allBookingList);
     return (
         <table className="parking-booking-list" id="parking-bookings">
             <thead>
                 <tr>
+                    <th>Booking Details</th>
                     <th>User Details</th>
                     <th>Parking Details</th>
-                    <th>Booking Data</th>
                     <th>Booking Date</th>
                     <th>Booking Hour</th>
                 </tr>
             </thead>
             <tbody>
-                {allBookingList.map(dataObj => ( 
+                {allBookingList.map(dataObj => (
                     <tr key={hexToDecimal(dataObj.timestamp._hex)}>
+                        <td>
+                            #Id: { hexToDecimal(dataObj.bookingId._hex) } <br></br>
+                            Charge: { Web3.utils.fromWei(String(hexToDecimal(dataObj.parkingCharge._hex)), 'ether') } ETH<br></br>
+                            { returnIfValidOwner(currentAccount, dataObj.bookingOwner, dataObj.parkingOwner, dataObj.parkingFor +" Registration No : " + dataObj.vehicleRegistrationNo) } 
+                        </td>
                         <td>
                             Booking By:  { dataObj.bookingBy }<br></br>
                             { returnIfValidOwner(currentAccount, dataObj.bookingOwner, dataObj.parkingOwner, dataObj.idType + " : " + dataObj.idCardNumber) }
@@ -48,10 +54,6 @@ const bookingListData = (currentAccount, allBookingList) => {
                             Parking Id: { hexToDecimal(dataObj.parkingsId._hex) }<br></br>
                             { dataObj.parkingName }<br></br>
                             { dataObj.parkingAddress }
-                        </td>
-                        <td>
-                            Booking Id: { hexToDecimal(dataObj.bookingId._hex) } <br></br>
-                            { returnIfValidOwner(currentAccount, dataObj.bookingOwner, dataObj.parkingOwner, dataObj.parkingFor +" Registration No : " + dataObj.vehicleRegistrationNo) } 
                         </td>
                         <td>{ moment.unix(hexToDecimal(dataObj.timestamp._hex)).format('ddd, MMM Do YYYY, hh:mm A') }</td>
                         <td>{ hexToDecimal(dataObj.bookingHour._hex) } {(hexToDecimal(dataObj.bookingHour._hex)>1)? "hours": "hour" }</td>
@@ -63,7 +65,6 @@ const bookingListData = (currentAccount, allBookingList) => {
 };
 
 const returnIfValidOwner = (currentAccount, bookingOwner, parkingOwner, data) =>{
-    console.log(currentAccount, bookingOwner, parkingOwner, data);
     if(currentAccount.toUpperCase() == bookingOwner.toUpperCase() || currentAccount.toUpperCase() == parkingOwner.toUpperCase()){
         return data;
     } else {

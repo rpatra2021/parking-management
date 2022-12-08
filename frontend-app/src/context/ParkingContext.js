@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { contractAbi, contractAddress } from "../constant/constant";
-
+import {GetUSDExchangeRate, GetETHExchangeRate} from "../utils/shortenAddress";
 const { ethereum } = window;
 export const ParkingContext = React.createContext();
 
@@ -13,6 +13,8 @@ const getEthereumContract = () => {
 }
 
 export const ParkingProvider = ({children}) => {
+    const [usdExRate, setUsdExRate] = useState();
+    const [ethExRate, setEthExRate] = useState();
     const [currentAccount, setCurrentAccount] = useState("");
     const [allParkingList, setAllParkingList] = useState([]);
     const [formData, setFormData] = useState({ 
@@ -47,6 +49,14 @@ export const ParkingProvider = ({children}) => {
 
     useEffect(() => {
         checkIfWalletIsConnected();
+        GetUSDExchangeRate().then((res) => {
+            setUsdExRate(parseFloat(res).toFixed(2));
+            //// console.log("usd", parseFloat(res).toFixed(2));
+        });
+        GetETHExchangeRate().then((res) => {
+            setEthExRate(parseFloat(res).toFixed(8));
+            //// console.log("eth", parseFloat(res).toFixed(8));
+        });
     }, []);
 
     const checkIfWalletIsConnected = async () => {
@@ -86,7 +96,6 @@ export const ParkingProvider = ({children}) => {
             const parkingList = await parkingContract.getAllParkingList();
             const reversed = [...parkingList].reverse();
             setAllParkingList(reversed);
-            console.log("parkingList", reversed);
         } catch (error) {
             console.log(error);
             throw new Error("No Ethereum object");
@@ -100,7 +109,6 @@ export const ParkingProvider = ({children}) => {
             const bookingList = await parkingContract.getAllBookingList();
             const reversed = [...bookingList].reverse();
             setAllBookingList(reversed);
-            console.log("bookingList", reversed);
         } catch (error) {
             console.log(error);
             throw new Error("No Ethereum object");
@@ -115,9 +123,7 @@ export const ParkingProvider = ({children}) => {
                 parkingName, parkingAddress, parkingCity, parkingState, parkingCountry, parkingZipCode,
                 parkingCapacity,  parkingAmount, amountUnit, parkingDetails, vehicleType 
             } = formData;
-            console.log("createNewParking", vehicleType);
             let vehicleTypeStr = vehicleType.toString();
-            console.log(vehicleTypeStr);
 
             const parkingContract = getEthereumContract();
             const pangHashData = await parkingContract.addParkingToBlockchain(
@@ -126,7 +132,6 @@ export const ParkingProvider = ({children}) => {
             );
             await pangHashData.wait();
             setIsLoading(false);
-            console.log("pangHashData", pangHashData);
             getAllParkingListData();
         }  catch (error) {
             setIsLoading(true);
@@ -139,16 +144,19 @@ export const ParkingProvider = ({children}) => {
         try{
             if(!currentAccount) connectWallet();
             setIsBookingProcessing(true);
-            console.log(formDataBooking);
             const { 
                 parkingId, parkingName, parkingAddress, bookingHour, parkingCharge, parkingChargeUnit, parkingFor, vehicleRegistrationNo, 
                 bookingBy, idType, idCardNumber, receiverAccountId
             } = formDataBooking;
 
-            const parkingChargeAtEth = parseInt(parkingCharge) / 1000000;
+            let parkingChargeAtEth = parkingCharge;
+            if(parkingChargeUnit == "USD"){
+                //// console.log("usd to eth exchange rate", ethExRate);
+                let parkingChargeUSD = parkingCharge;
+                parkingChargeAtEth = parkingChargeUSD * ethExRate;
+            }
 
             const parseAmount = ethers.utils.parseEther(String(parkingChargeAtEth));
-            console.log(parseAmount);
             await ethereum.request({
                 method: "eth_sendTransaction",
                 params: [{
@@ -165,7 +173,6 @@ export const ParkingProvider = ({children}) => {
                 parkingFor, vehicleRegistrationNo, bookingBy, idType, idCardNumber
             );
             await bookingHashData.wait();
-            console.log("bookingHashData", bookingHashData);
             setIsBookingProcessing(false);
             getAllBookingListData();
         }  catch (error) {
@@ -173,7 +180,7 @@ export const ParkingProvider = ({children}) => {
             console.log(error);
             throw new Error("No Ethereum object");
         }
-    }
+    };
 
     return(
         <ParkingContext.Provider value={{ 
